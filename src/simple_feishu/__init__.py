@@ -1,5 +1,6 @@
 import subprocess
 from typing import Optional
+from utils import gen_nested_message
 
 
 class FeishuRobot:
@@ -12,7 +13,7 @@ class FeishuRobot:
             "curl",
             *["-X", "POST"],
             *["-H", "Content-Type: application/json"],
-            *["-d", message],
+            *["-d", gen_nested_message(message, "text", self.secret)],
             self.token,
         ]
         return subprocess.run(notify_command).returncode
