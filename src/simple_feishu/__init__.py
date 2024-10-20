@@ -3,7 +3,7 @@ from typing import Optional
 from utils import gen_nested_message
 
 
-class FeishuRobot:
+class FeishuBot:
     def __init__(self, token: str, secret: Optional[str] = None) -> None:
         self.token = token
         self.secret = secret
