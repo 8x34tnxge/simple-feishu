@@ -19,32 +19,37 @@ def gen_sign(timestamp: int, secret: str) -> str:
     return sign
 
 
-def gen_normal_message(msg: str, msg_type: str) -> Dict:
+def gen_general_content(tag: str, msg: str) -> Dict:
     return {
-        "msg_type": msg_type,
-        "content": {
-            "text": msg,
-        },
+        "tag": tag,
+        "text": msg,
     }
 
 
-def gen_signed_message(msg: str, msg_type: str, secret: str) -> Dict:
+def gen_text_message(msg: str, secret: Optional[str] = None) -> Dict:
+    ret = {
+        "msg_type": "text",
+        "content": gen_general_content("text", msg),
+    }
+
+    if secret is not None:
+        ret = {**gen_signature(secret), **ret}
+
+    return ret
+
+
+def gen_signature(secret: str) -> Dict:
     timestamp = int(time.time())
     return {
-        **{
-            "timestamp": timestamp,
-            "sign": gen_sign(timestamp, secret),
-        },
-        **gen_normal_message(msg, msg_type),
+        "timestamp": timestamp,
+        "sign": gen_sign(timestamp, secret),
     }
 
 
 def gen_nested_message(
     msg: str, msg_type: str = "text", secret: Optional[str] = None
 ) -> JsonStr:
-    msg_body: Dict = (
-        gen_normal_message(msg, msg_type)
-        if secret is None
-        else gen_signed_message(msg, msg_type, secret)
-    )
+    msg_body: Dict = {}
+    if msg_type == "text":
+        msg_body = gen_text_message(msg, secret)
     return json.dumps(msg_body)
