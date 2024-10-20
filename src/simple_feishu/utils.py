@@ -22,7 +22,9 @@ def gen_sign(timestamp: int, secret: str) -> str:
 def gen_normal_message(msg: str, msg_type: str) -> Dict:
     return {
         "msg_type": msg_type,
-        "content": msg,
+        "content": {
+            "text": msg,
+        },
     }
 
 
