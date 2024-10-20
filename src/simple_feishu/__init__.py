@@ -1,6 +1,6 @@
 import subprocess
 from typing import Optional
-from utils import gen_nested_message
+from .utils import gen_nested_message
 
 
 class FeishuBot:
